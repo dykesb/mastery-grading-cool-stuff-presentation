@@ -1,6 +1,6 @@
 ---
 title: "Example Rubric"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
