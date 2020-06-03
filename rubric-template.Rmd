@@ -1,0 +1,44 @@
+---
+title: "Example Rubric"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+load("df.Rdata")
+
+library(tidyverse)
+library(knitr)
+```
+
+This report was generated for `r df$student` on `r Sys.Date()`.
+
+```{r warning = FALSE}
+df <- df %>%
+  mutate_at(vars(contains("mark")), factor) %>% 
+  mutate_if(is.factor, ~fct_recode(., Progressing = "0", Satisfactory = "1")) %>% 
+  mutate_if(is.factor, as.character) 
+
+df %>% 
+  select(contains("criteria")) %>% 
+  pivot_longer(cols = contains("criteria"), names_to = c("criteria", "type"), names_pattern = "(criteria .) (.*)", values_to = "feedback") %>% 
+  pivot_wider(names_from = type, values_from = feedback) %>% 
+  kable()
+```
+
+**Overall Mark**:
+
+```{r results='asis'}
+paste(df$`overall mark`)
+```
+
+
+**Additional Comments**:
+
+```{r results='asis'}
+paste(df$`additional comments`)
+```
+
+
+
